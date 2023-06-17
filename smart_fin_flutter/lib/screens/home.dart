@@ -5,6 +5,14 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Column(
+      children: [
+        Text(
+          'SmartFin',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Text('Sign in with Plaid'),
+      ],
+    );
   }
 }
