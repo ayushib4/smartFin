@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smart_fin_flutter/screens/home.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const SmartFin());
 }
 
