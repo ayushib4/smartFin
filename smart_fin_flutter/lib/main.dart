@@ -13,7 +13,7 @@ class SmartFin extends StatelessWidget {
     return MaterialApp(
       title: 'SmartFin',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: const ColorScheme.dark(),
         useMaterial3: true,
       ),
       home: const Home(),
