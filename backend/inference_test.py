@@ -1,9 +1,8 @@
 import inference
 
 examples = [
-            {
-                "question": 
-                """ 
+    {
+        "question": """ 
                 Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions. 
                 You are a financial advisor. Given the following transactions and their corresponding details, 
                 provide personalized financial advice based on the user's financial goals, spending patterns, and current financial situation. 
@@ -45,10 +44,8 @@ examples = [
                 },
                 }
                 ]
-                """, 
-
-                "answer": 
-                """
+                """,
+        "answer": """
                 Example Inference: 
                 Psychographic Inferences: 
                 - The buyer prioritizes quality and has enough money to afford an expensive laptop
@@ -81,12 +78,10 @@ examples = [
                 4. Plan for Upgrades: When purchasing expensive electronics, consider their long-term lifespan and factor in the frequency of upgrades. By planning ahead and budgeting for future upgrades, you can better manage the financial impact of replacing devices in the future.
 
                 5. Protect Your Investment: To ensure the longevity of your electronics, consider investing in protective cases, screen protectors, and warranties. This can help prevent accidental damage and extend the lifespan of your devices, reducing the need for frequent replacements.
-                """
-            }, 
-
-            {
-                "question": 
-                """ 
+                """,
+    },
+    {
+        "question": """ 
                 Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions. 
                 You are a financial advisor. Given the following transactions and their corresponding details, 
                 provide personalized financial advice based on the user's financial goals, spending patterns, and current financial situation. 
@@ -129,10 +124,8 @@ examples = [
                     }
                 ]
                 }
-                """, 
-
-                "answer": 
-                """
+                """,
+        "answer": """
                 Psychographic Inferences:
 
                 The buyer prefers fast-food options and is likely to prioritize convenience and speed when it comes to meals.
@@ -168,9 +161,9 @@ examples = [
                 4. Plan Ahead: If you find yourself relying on fast food due to time constraints or convenience, consider planning your meals in advance. Prepare meals or snacks that are easy to grab on the go, such as pre-made salads, sandwiches, or fruit cups. This way, you can still enjoy the convenience without compromising on your health or budget.
 
                 5. Explore Local Options: Instead of always opting for large fast-food chains, consider supporting local businesses that offer healthier alternatives. Look for cafes or restaurants that prioritize fresh ingredients, nutritious options, and sustainable practices. It can be a great way to discover new flavors while making better choices for your health and the community.
-                """
-            }
-        ]
+                """,
+    },
+]
 
 input_test = """
 Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions. 
