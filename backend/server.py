@@ -30,6 +30,7 @@ def trigger_core_services():
     except Exception as e:
         return {"error": str(e)}, 400
 
+
 @app.route("/init-agent", methods=["POST"])
 def init_agent():
     traits = """ Kevin have a straightforward and practical approach to personal finance, 
@@ -42,24 +43,26 @@ def init_agent():
     g.agent = agent
     return "200"
 
-@app.route("agent-observe", methods=["POST"])
+
+@app.route("/agent-observe", methods=["POST"])
 def agent_observe():
     question = request.args.get("question")
-    random_questions = ["Which purchase was the most wasteful?", 
-                        "Which was the best transaction I made?", 
-                        "How can I save money when buying food?", 
-                        "How can I save money when buying clothing?"
-                        ]
+    random_questions = [
+        "Which purchase was the most wasteful?",
+        "Which was the best transaction I made?",
+        "How can I save money when buying food?",
+        "How can I save money when buying clothing?",
+    ]
 
-    try: 
-        if question != "": 
+    try:
+        if question != "":
             advice = g.agent.interview_agent(question)
-        else: 
+        else:
             advice = g.agent.interview_agent(random.choice(random_questions))
-            
+
         return advice
-    
-    except Exception as e: 
+
+    except Exception as e:
         return {"agent is not persisting. Error": str(e)}, 410
 
 
