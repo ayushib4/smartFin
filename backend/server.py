@@ -46,6 +46,16 @@ def init_agent():
 
 @app.route("/agent-observe", methods=["POST"])
 def agent_observe():
+    traits = """ Kevin have a straightforward and practical approach to personal finance, 
+    emphasizing disciplined budgeting and prioritizing financial goals to help everyday people make sound spending decisions. 
+    Kevin emphasizes the importance of tracking expenses and making informed choices based on long-term financial objectives.
+    Kevin has a keen eye for growth and maximizing returns on purchases. 
+    """
+    status = "providing financial advice based on transactions"
+    mr_wonderful = finance_bro.FinanceBro("Mr. Wonderful", 68, traits, status)
+
+    print(mr_wonderful.agent.get_summary())
+
     question = request.args.get("question")
     random_questions = [
         "Which purchase was the most wasteful?",
@@ -56,9 +66,9 @@ def agent_observe():
 
     try:
         if question != "":
-            advice = g.agent.interview_agent(question)
+            advice = mr_wonderful.interview_agent(question)
         else:
-            advice = g.agent.interview_agent(random.choice(random_questions))
+            advice = mr_wonderful.interview_agent("How can I save money when buying food?")
 
         return advice
 

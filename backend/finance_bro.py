@@ -75,8 +75,8 @@ class FinanceBro:
             self.agent.memory.add_memory(observation)
 
     def interview_agent(self, message: str) -> str:
-        new_message = f"{USER_NAME} says {message}"
-        return self.agent.generate_dialogue_response(new_message)[1]
+        print(message)
+        return self.agent.generate_dialogue_response(message)[1]
 
 
 if __name__ == "__main__":

@@ -14,16 +14,16 @@ PINECONE_ENV = getenv("PINECONE_ENV")
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
 
 
-def create_pinecone_index(user_id):
-    if "transactions" in pinecone.list_indexes():
+def create_pinecone_index():
+    if "transaction" in pinecone.list_indexes():
         return
 
-    metadata_config = {"user_id": user_id}
+    metadata_config = {"indexed": ["user_id"]}
     # with the metadata config, pinecone will only filter with the provided metadata field(s)
     pinecone.create_index(
-        "transactions", dimension=DIMENSIONS, metadata_config=metadata_config
+        "transaction", dimension=DIMENSIONS, metadata_config=metadata_config
     )
-    print(f"Created pinecone index called 'transactions'")
+    print(f"Created pinecone index called 'transaction'")
     return
 
 
@@ -64,11 +64,11 @@ def prepare_data_for_embedding(json_data):
 
 def store_embeddings(user_id, data):
     assert (
-        "transactions" in pinecone.list_indexes()
-    ), f"Could not find the transactions indexs"
+        "transaction" in pinecone.list_indexes()
+    ), f"Could not find the transaction indexs"
 
     model = InferenceModel(prompt_examples=PROMPT_EXAMPLES)
-    index = pinecone.Index(f"transactions")
+    index = pinecone.Index(f"transaction")
     batch_size = 128  # how many embeddings we create and insert at once
 
     for i in range(0, len(data), batch_size):
@@ -85,7 +85,7 @@ def store_embeddings(user_id, data):
             vectors[j] = (
                 data[j]["transaction_id"],
                 get_embedding(string_data + inferred_data),
-                {"user_id": user_id},
+                {"user_id": user_id, "inference": inferred_data},
             )
 
             print("Emedding start " + str(time.time()))
@@ -97,13 +97,16 @@ def store_embeddings(user_id, data):
 def construct_prompt(user_id, query):
     query_embedding = get_embedding(query)
 
-    index = pinecone.Index(f"transactions")
+    index = pinecone.Index(f"transaction")
     response = index.query(
         query_embedding,
         top_k=1,
         filter={"user_id": {"$eq": user_id}},
         include_metadata=True,
     )
+    result = [x["metadata"]["inference"] for x in response["matches"]]
+    print(result)
+    return result
 
     print(response)
     return response
@@ -112,14 +115,14 @@ def construct_prompt(user_id, query):
     ]  # replace inference with fields relevant for contexts
 
 
-def init_pinecone(user_id: str, transactions: list[dict]) -> None:
-    create_pinecone_index(user_id)
+def init_pinecone(user_id: str, transaction_infs: list[dict]) -> None:
+    create_pinecone_index()
     print("Done indexing " + str(time.time()))
-    store_embeddings(user_id, transactions)
+    store_embeddings(user_id, transaction_infs)
 
 
-def update_pinecone(user_id: str, transactions: list[dict]) -> None:
-    store_embeddings(user_id, transactions)
+def update_pinecone(user_id: str, transaction_infs: list[dict]) -> None:
+    store_embeddings(user_id, transaction_infs)
 
 
 def query_pinecone(user_id: str, query: str) -> None:
