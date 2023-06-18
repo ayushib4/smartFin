@@ -22,7 +22,7 @@ def create_pinecone_index(user_id):
 
 
 def prepare_data_for_embedding(json_data):
-    text = ""
+    strs: list[str] = []
     categories = [
         "amount",
         "authorized_date",
@@ -37,17 +37,24 @@ def prepare_data_for_embedding(json_data):
         "pending",
         "personal_finance_category",
     ]
+
     for category in categories:
         if category not in json_data:
-            print(f"Warning: {category} not found in provided data")
+            print(f"WARNING: {category} not found in transaction JSON")
             continue
+
+        category_data = json_data[category]
+
         if category == "location":
-            text += f"{category}: {json_data[category]['address']}, {json_data[category]['city']}, {json_data[category]['country']}, {json_data[category]['postal_code']}. "
-        if category == "personal_finance_category":
-            text += f"{category}: {json_data[category]['detailed']}. "
+            strs.append(
+                f"{category}: {category_data['address']}, {category_data['city']}, {category_data['country']}, {category_data['postal_code']}."
+            )
+        elif category == "personal_finance_category":
+            strs.append(f"{category}: {category_data['detailed']}.")
         else:
-            text += f"{category}: {json_data[category]}. "
-    return text
+            strs.append(f"{category}: {category_data}.")
+
+    return " ".join(strs)
 
 
 def store_embeddings(user_id, data):
