@@ -39,7 +39,7 @@ def construct_prompt(user_id, query):
     query_embedding = get_embedding(query)
     index = pinecone.Index(f"{user_id}-transactions")
     response = index.query(query_embedding, top_k=3, include_metadata=True)
-
+    contexts = [x["metadata"]["inference"] for x in response["matches"]]
 
 def semantic_search(user_id):
     # now connect to the index
