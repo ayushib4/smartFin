@@ -1,4 +1,5 @@
 black==23.3.0
+faiss-cpu==1.7.4
 flask==2.3.2
 pinecone-client==2.2.2
 python-dotenv==1.0.0
