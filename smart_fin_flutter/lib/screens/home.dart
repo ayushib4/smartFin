@@ -1,49 +1,7 @@
-// import 'package:flutter/material.dart';
-
-// class Home extends StatefulWidget {
-//   const Home({super.key});
-
-//   @override
-//   State<Home> createState() => _HomeState();
-// }
-
-// class _HomeState extends State<Home> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Center(
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               const Padding(
-//                 padding: EdgeInsets.all(16.0),
-//                 child: Text(
-//                   'SmartFin',
-//                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-//                 child: ElevatedButton(
-//                   onPressed: () => {
-//                     print("hi"),
-//                   },
-//                   child: const Text('Sign in with Plaid'),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -59,7 +17,9 @@ class _HomeState extends State<Home> {
   StreamSubscription<LinkEvent>? _streamEvent;
   StreamSubscription<LinkExit>? _streamExit;
   StreamSubscription<LinkSuccess>? _streamSuccess;
-  LinkObject? _successObject;
+  // LinkObject? _successObject;
+  String linkToken = "";
+  String accessToken = "";
 
   @override
   void initState() {
@@ -72,7 +32,7 @@ class _HomeState extends State<Home> {
     _streamSuccess = PlaidLink.onSuccess.listen(_onSuccess);
   }
 
-  Future<String> createLinkToken() async {
+  void createLinkToken() async {
     http.Response response = await http.post(
       Uri.parse('https://sandbox.plaid.com/link/token/create'),
       headers: <String, String>{
@@ -96,12 +56,10 @@ class _HomeState extends State<Home> {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      linkToken = await jsonDecode(response.body)['link_token'];
     } else {
       print(response.body);
     }
-
-    return response.body;
   }
 
   @override
@@ -113,68 +71,105 @@ class _HomeState extends State<Home> {
   }
 
   void _createLinkTokenConfiguration() {
-    setState(() {
-      _configuration = LinkTokenConfiguration(
-        token: "GENERATED_LINK_TOKEN",
-      );
-    });
+    _configuration = LinkTokenConfiguration(
+      token: linkToken,
+    );
+
+    PlaidLink.open(configuration: _configuration!);
   }
 
   void _onEvent(LinkEvent event) {
-    final name = event.name;
-    final metadata = event.metadata.description();
-    print("onEvent: $name, metadata: $metadata");
+    // final name = event.name;
+    // final metadata = event.metadata.description();
+    // print("onEvent: $name, metadata: $metadata");
   }
 
-  void _onSuccess(LinkSuccess event) {
+  void _onSuccess(LinkSuccess event) async {
     final token = event.publicToken;
-    final metadata = event.metadata.description();
-    print("onSuccess: $token, metadata: $metadata");
-    setState(() => _successObject = event);
+
+    http.Response response = await http.post(
+      Uri.parse('https://sandbox.plaid.com/item/public_token/exchange'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'client_id': dotenv.env["PLAID_CLIENT_ID"].toString(),
+        'secret': dotenv.env["PLAID_SECRET"].toString(),
+        'public_token': token,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      accessToken = await jsonDecode(response.body)['access_token'];
+      // print("Access token: $accessToken");
+    } else {
+      print(response.body);
+    }
+
+    // final metadata = event.metadata.description();
+    // print("onSuccess: $token, metadata: $metadata");
+    // _successObject = event;
   }
 
   void _onExit(LinkExit event) {
-    final metadata = event.metadata.description();
-    final error = event.error?.description();
-    print("onExit metadata: $metadata, error: $error");
+    // final metadata = event.metadata.description();
+    // final error = event.error?.description();
+    // print("onExit metadata: $metadata, error: $error");
+  }
+
+  void getTransactions() async {
+    http.Response response = await http.post(
+      Uri.parse('https://sandbox.plaid.com/transactions/get'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'client_id': dotenv.env["PLAID_CLIENT_ID"].toString(),
+        'secret': dotenv.env["PLAID_SECRET"].toString(),
+        'access_token': accessToken,
+        'start_date': '2018-01-01',
+        'end_date': '2023-01-01',
+        'options': {
+          'count': 250,
+          'offset': 100,
+          'include_personal_finance_category': true,
+        },
+      }),
+    );
+    var transactions = jsonDecode(response.body)['transactions'];
+    print("TRANSACTION DATA:\n$transactions");
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          width: double.infinity,
-          color: Colors.grey[200],
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Expanded(
-                child: Center(
-                  child: Text(
-                    _configuration?.toJson().toString() ?? "",
-                    textAlign: TextAlign.center,
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  "SmartFin",
+                  style: TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: _createLinkTokenConfiguration,
-                child: const Text("Create Link Token Configuration"),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                child: ElevatedButton(
+                  onPressed: _createLinkTokenConfiguration,
+                  child: const Text("Sign in with Plaid"),
+                ),
               ),
-              const SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: _configuration != null
-                    ? () => PlaidLink.open(configuration: _configuration!)
-                    : null,
-                child: const Text("Open"),
-              ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    _successObject?.toJson().toString() ?? "",
-                    textAlign: TextAlign.center,
-                  ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                child: ElevatedButton(
+                  onPressed: () => getTransactions(),
+                  child: const Text("Get Transactions"),
                 ),
               ),
             ],
