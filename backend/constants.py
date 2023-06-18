@@ -1,3 +1,3 @@
 EMBEDDING_MODEL = "text-embedding-ada-002"
-INFERENCE_MODEL = "gpt-3.5-turbo"
+INFERENCE_MODEL = "gpt-4"
 DIMENSIONS = 1024
