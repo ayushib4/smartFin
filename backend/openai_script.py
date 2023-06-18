@@ -1,9 +1,13 @@
 import openai
+from dotenv import load_dotenv
 from os import getenv
 from constants import INFERENCE_MODEL
 
+load_dotenv()
+
 openai.organization = getenv("OPENAI_ORG_ID")
 openai.api_key = getenv("OPENAI_API_KEY")
+
 openai.Model.list()
 
 
