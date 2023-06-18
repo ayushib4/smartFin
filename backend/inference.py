@@ -2,9 +2,8 @@ from langchain import FewShotPromptTemplate, LLMChain, PromptTemplate
 import openai
 from dotenv import load_dotenv
 from os import getenv
-from constants import INFERENCE_MODEL
+from constants import INFERENCE_MODEL, PROMPT_EXAMPLES, PROMPT_PREFIX, PROMPT_SUFFIX
 from langchain.chat_models import ChatOpenAI
-import json
 
 load_dotenv()
 
@@ -12,12 +11,15 @@ openai.api_key = getenv("OPENAI_API_KEY")
 openai.organization = getenv("OPENAI_ORG_ID")
 
 
-# TODO: Fix prompt and example inputs, see https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/few_shot_examples
 class InferenceModel:
+    """
+    A GPT wrapper for inferring from transactions data, using model and prompt constants
+    """
+
     def __init__(
         self,
         model_name=INFERENCE_MODEL,
-        prompt_examples: list[dict[str, str]] = [],
+        prompt_examples: list[dict[str, str]] = PROMPT_EXAMPLES,
     ) -> None:
         self.model_name = model_name
 
@@ -37,5 +39,5 @@ class InferenceModel:
             llm=ChatOpenAI(temperature=0, model=model_name), prompt=prompt
         )
 
-    def fetch_gpt_response(self, prompt: str) -> str:
-        return self.chain.run(prompt)
+    def infer_from_transaction(self, transaction: str) -> str:
+        return self.chain.run(PROMPT_PREFIX + transaction + PROMPT_SUFFIX)
