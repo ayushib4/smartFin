@@ -1,49 +1,6 @@
-from langchain import FewShotPromptTemplate, LLMChain, PromptTemplate
-import openai
-from dotenv import load_dotenv
-from os import getenv
-from constants import INFERENCE_MODEL
-from langchain.chat_models import ChatOpenAI
-import json
+import inference
 
-load_dotenv()
-
-openai.api_key = getenv("OPENAI_API_KEY")
-openai.organization = getenv("OPENAI_ORG_ID")
-
-
-# TODO: Fix prompt and example inputs, see https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/few_shot_examples
-class InferenceModel:
-    def __init__(
-        self,
-        model_name=INFERENCE_MODEL,
-        prompt_examples: list[dict[str, str]] = [],
-    ) -> None:
-        self.model_name = model_name
-
-        example_prompt = PromptTemplate(
-            input_variables=list(prompt_examples[0].keys()),
-            template="Question: {question}\n{answer}",
-        )
-
-        prompt = FewShotPromptTemplate(
-            examples=prompt_examples,
-            example_prompt=example_prompt,
-            suffix="Question: {input}",
-            input_variables=["input"],
-        )
-
-        self.chain = LLMChain(
-            llm=ChatOpenAI(temperature=0, model=model_name), prompt=prompt
-        )
-
-    def fetch_gpt_response(self, prompt: str) -> str:
-        return self.chain.run(prompt)
-    
-    # def examples(self):
-        # Todo: user information
-
-        examples = [
+examples = [
             {
                 "question": 
                 """ 
@@ -214,4 +171,44 @@ class InferenceModel:
                 """
             }
         ]
-        return examples
+
+input_test = """
+Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions. 
+
+{
+   "amount": 19.95,
+   "iso_currency_code": "USD",
+   "category": [
+      "Shopping",
+      "Clothing"
+   ],
+   "category_id": "19012000",
+   "date": "2023-06-16",
+   "datetime": "2023-06-16T17:30:00Z",
+   "authorized_date": "2023-06-16",
+   "authorized_datetime": "2023-06-16T17:30:00Z",
+   "location": {
+      "address": "789 Oak St",
+      "city": "Somewhere",
+      "region": "NY",
+      "postal_code": "54321",
+      "country": "US",
+      "lat": 40.987654,
+      "lon": -74.987654,
+      "store_number": "654"
+   },
+   "name": "Fashion Emporium",
+   "merchant_name": "Fashion Emporium",
+   "payment_channel": "in store",
+   "personal_finance_category": {
+      "primary": "APPAREL_AND_SERVICES",
+      "detailed": "APPAREL_AND_ACCESSORIES"
+   }
+}
+"""
+
+infer = inference.InferenceModel(prompt_examples=examples)
+
+result = infer.fetch_gpt_response(input_test)
+
+print(result)
