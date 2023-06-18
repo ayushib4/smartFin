@@ -2,6 +2,9 @@ from os import getenv
 import pinecone
 from backend.constants import DIMENSIONS
 from backend.embeddings import get_embedding
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PINECONE_API_KEY = getenv("PINECONE_API_KEY")
 PINECONE_ENV = getenv("PINECONE_ENVIRONMENT")
