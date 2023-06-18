@@ -16,7 +16,8 @@ model_id = "multi-qa-MiniLM-L6-cos-v1"
 
 hf_token = getenv("HF_TOKEN")
 
+
 def get_embedding(input, model_id=model_id):
-    embedder = SentenceTransformer(model_id, cache_folder='embedder')
+    embedder = SentenceTransformer(model_id, cache_folder="embedder")
     embeddings = embedder.encode(input)
     return embeddings.tolist()
