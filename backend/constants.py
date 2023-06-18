@@ -1,7 +1,7 @@
 # Models
 EMBEDDING_MODEL = "multi-qa-MiniLM-L6-cos-v1"  # From HuggingFace
 INFERENCE_MODEL = "gpt-4"  # From OpenAI
-DIMENSIONS = 128
+DIMENSIONS = 384
 
 PROMPT_EXAMPLES = [
     {

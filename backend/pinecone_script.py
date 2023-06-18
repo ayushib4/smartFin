@@ -14,11 +14,11 @@ PINECONE_ENV = getenv("PINECONE_ENV")
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
 
 
-def create_pinecone_index(user_id):
+def create_pinecone_index():
     if "transactions" in pinecone.list_indexes():
         return
 
-    metadata_config = {"user_id": user_id}
+    metadata_config = {"indexed": ["user_id"]}
     # with the metadata config, pinecone will only filter with the provided metadata field(s)
     pinecone.create_index(
         "transactions", dimension=DIMENSIONS, metadata_config=metadata_config
@@ -80,6 +80,8 @@ def store_embeddings(user_id, data):
 
             inferred_data = model.infer_from_transaction(string_data)
 
+            print(inferred_data)
+
             print("Inference end " + str(time.time()))
 
             vectors[j] = (
@@ -113,7 +115,7 @@ def construct_prompt(user_id, query):
 
 
 def init_pinecone(user_id: str, transactions: list[dict]) -> None:
-    create_pinecone_index(user_id)
+    create_pinecone_index()
     print("Done indexing " + str(time.time()))
     store_embeddings(user_id, transactions)
 
