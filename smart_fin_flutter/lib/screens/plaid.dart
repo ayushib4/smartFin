@@ -118,12 +118,9 @@ class _PlaidState extends State<Plaid> {
       final transactionsJSON = jsonEncode(transactions);
       log(transactionsJSON);
 
-      String accId = "";
-
       for (dynamic transaction in transactions) {
         final transactionId = transaction['transaction_id'];
         final accountId = transaction['account_id'];
-        accId = accountId;
         final amount = transaction['amount'];
         final authorizedDate = transaction['authorized_date'];
         final authorizedDatetime = transaction['authorized_datetime'];
@@ -156,15 +153,15 @@ class _PlaidState extends State<Plaid> {
         });
       }
 
-      response = await http.post(
-        Uri.parse('http://10.168.1.58:5000/trigger-core'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'user_id': accId,
-        }),
-      );
+      // response = await http.post(
+      //   Uri.parse('http://10.165.1.120:5000/trigger-core'),
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: jsonEncode({
+      //     'user_id': accId,
+      //   }),
+      // );
 
       goToUser();
     } else {
@@ -202,7 +199,10 @@ class _PlaidState extends State<Plaid> {
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
               child: ElevatedButton(
                 onPressed: _createLinkTokenConfiguration,
-                child: const Text("Sign in with Plaid"),
+                child: const Text(
+                  "Sign in with Plaid",
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
             ),
           ],

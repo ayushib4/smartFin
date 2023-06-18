@@ -118,15 +118,6 @@ class _AgentState extends State<Agent> {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Ask Mr. Wonderful a question',
-                ),
-              ),
-            ),
           ],
         ),
       ),

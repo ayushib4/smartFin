@@ -1,5 +1,8 @@
+// import 'dart:developer';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:smart_fin_flutter/screens/agent.dart';
+// import 'package:http/http.dart' as http;
 
 class User extends StatefulWidget {
   const User({super.key});
@@ -11,9 +14,25 @@ class User extends StatefulWidget {
 class _UserState extends State<User> {
   final _formKey = GlobalKey<FormState>();
 
-  void submitForm() {
-    // Get the mood and response from HTTP API to pass into Agent
-    goToAgent("angry", "This is your response");
+  void submitForm() async {
+    // http.Response response = await http.post(
+    //   Uri.parse('http://10.165.1.120:5000/agent-observe'),
+    //   headers: <String, String>{
+    //     'Content-Type': 'text/plain',
+    //   },
+    // );
+
+    // log(jsonDecode(response.body));
+
+    var respToPick = Random().nextInt(2);
+
+    if (_formKey.currentState!.validate()) {
+      goToAgent(
+          "angry",
+          respToPick == 0
+              ? "You spent over \$1K at Abercrombie & Fitch this month. Try cutting back on shopping for non-essentials."
+              : "You spent a reasonable amount on food and transportation this month, but you could've saved more on late-night Uber rides.");
+    }
   }
 
   void goToAgent(String mood, String response) {
