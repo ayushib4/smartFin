@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:plaid_flutter/plaid_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:developer';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,7 +18,6 @@ class _HomeState extends State<Home> {
   StreamSubscription<LinkEvent>? _streamEvent;
   StreamSubscription<LinkExit>? _streamExit;
   StreamSubscription<LinkSuccess>? _streamSuccess;
-  // LinkObject? _successObject;
   String linkToken = "";
   String accessToken = "";
 
@@ -27,8 +27,6 @@ class _HomeState extends State<Home> {
 
     createLinkToken();
 
-    _streamEvent = PlaidLink.onEvent.listen(_onEvent);
-    _streamExit = PlaidLink.onExit.listen(_onExit);
     _streamSuccess = PlaidLink.onSuccess.listen(_onSuccess);
   }
 
@@ -58,7 +56,7 @@ class _HomeState extends State<Home> {
     if (response.statusCode == 200) {
       linkToken = await jsonDecode(response.body)['link_token'];
     } else {
-      print(response.body);
+      log(response.body);
     }
   }
 
@@ -76,12 +74,6 @@ class _HomeState extends State<Home> {
     );
 
     PlaidLink.open(configuration: _configuration!);
-  }
-
-  void _onEvent(LinkEvent event) {
-    // final name = event.name;
-    // final metadata = event.metadata.description();
-    // print("onEvent: $name, metadata: $metadata");
   }
 
   void _onSuccess(LinkSuccess event) async {
@@ -103,18 +95,8 @@ class _HomeState extends State<Home> {
       accessToken = await jsonDecode(response.body)['access_token'];
       // print("Access token: $accessToken");
     } else {
-      print(response.body);
+      log(response.body);
     }
-
-    // final metadata = event.metadata.description();
-    // print("onSuccess: $token, metadata: $metadata");
-    // _successObject = event;
-  }
-
-  void _onExit(LinkExit event) {
-    // final metadata = event.metadata.description();
-    // final error = event.error?.description();
-    // print("onExit metadata: $metadata, error: $error");
   }
 
   void getTransactions() async {
@@ -137,43 +119,41 @@ class _HomeState extends State<Home> {
       }),
     );
     var transactions = jsonDecode(response.body)['transactions'];
-    print("TRANSACTION DATA:\n$transactions");
+    log("TRANSACTION DATA:\n$transactions");
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  "SmartFin",
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                  ),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                "SmartFin",
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-                child: ElevatedButton(
-                  onPressed: _createLinkTokenConfiguration,
-                  child: const Text("Sign in with Plaid"),
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+              child: ElevatedButton(
+                onPressed: _createLinkTokenConfiguration,
+                child: const Text("Sign in with Plaid"),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-                child: ElevatedButton(
-                  onPressed: () => getTransactions(),
-                  child: const Text("Get Transactions"),
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+              child: ElevatedButton(
+                onPressed: () => getTransactions(),
+                child: const Text("Get Transactions"),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
