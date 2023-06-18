@@ -86,12 +86,12 @@ class _HomeState extends State<Home> {
         'products': ['auth', 'transactions'],
         'country_codes': ['US'],
         'language': 'en',
+        'android_package_name': 'com.example.smart_fin_flutter',
         'account_filters': {
           'depository': {
             'account_subtypes': ['checking'],
           },
         },
-        'android_package_name': 'com.example.smart_fin_flutter',
       }),
     );
 
