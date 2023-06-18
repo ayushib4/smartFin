@@ -163,7 +163,7 @@ class _PlaidState extends State<Plaid> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'account_id': accId,
+          'user_id': accId,
         }),
       );
       log(response.statusCode.toString());
