@@ -168,19 +168,20 @@ class _PlaidState extends State<Plaid> {
       );
       log(response.statusCode.toString());
 
-      goToAgent();
+      goToAgent("angry",
+          "Hey there! I noticed you spent a lot of money at Apple this month (\$1K).");
     } else {
       log(response.body);
     }
   }
 
-  void goToAgent() {
-    log("going to agent");
+  void goToAgent(String mood, String response) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Agent(
-          mood: "angry",
+        builder: (context) => Agent(
+          mood: mood,
+          response: response,
         ),
       ),
     );

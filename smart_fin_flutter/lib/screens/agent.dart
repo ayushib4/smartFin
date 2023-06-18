@@ -3,9 +3,10 @@ import 'package:smart_fin_flutter/widgets/received_message.dart';
 import 'package:video_player/video_player.dart';
 
 class Agent extends StatefulWidget {
-  const Agent({super.key, required this.mood});
+  const Agent({super.key, required this.mood, required this.response});
 
   final String mood;
+  final String response;
 
   @override
   State<Agent> createState() => _AgentState();
@@ -16,10 +17,13 @@ class _AgentState extends State<Agent> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
   bool visibility = true;
+  String response = "";
 
   @override
   void initState() {
     super.initState();
+
+    response = widget.response;
 
     String mood = widget.mood;
 
@@ -52,15 +56,9 @@ class _AgentState extends State<Agent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Ask Mr. Wonderful",
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+              child: ReceivedMessage(message: response),
             ),
             FutureBuilder(
               future: _initializeVideoPlayerFuture,
@@ -77,12 +75,6 @@ class _AgentState extends State<Agent> {
                 }
               },
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-              child: ReceivedMessage(
-                  message:
-                      "Hey there! I noticed you spent a lot of money at Apple this month (\$1K)."),
-            ),
             Visibility(
               visible: visibility,
               child: Padding(
@@ -94,6 +86,7 @@ class _AgentState extends State<Agent> {
                       child: const Icon(
                         Icons.thumb_up,
                         size: 20.0,
+                        color: Colors.blue,
                       ),
                     ),
                     Padding(
@@ -103,6 +96,7 @@ class _AgentState extends State<Agent> {
                         child: const Icon(
                           Icons.thumb_down,
                           size: 20.0,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
@@ -113,6 +107,7 @@ class _AgentState extends State<Agent> {
                         child: const Icon(
                           Icons.tag_faces_rounded,
                           size: 20.0,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
@@ -120,15 +115,15 @@ class _AgentState extends State<Agent> {
                 ),
               ),
             ),
-            // const Padding(
-            //   padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
-            //   child: TextField(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //       labelText: 'Type your message here',
-            //     ),
-            //   ),
-            // ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Ask Mr. Wonderful a question',
+                ),
+              ),
+            ),
           ],
         ),
       ),

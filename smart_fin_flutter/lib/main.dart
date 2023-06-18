@@ -19,6 +19,7 @@ class SmartFin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'SmartFin',
       theme: ThemeData(
         colorScheme: const ColorScheme.dark(background: Colors.black),
