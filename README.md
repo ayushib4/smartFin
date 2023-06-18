@@ -1,8 +1,8 @@
-# smartFin
+# smartFin 💰
 
-With smartFin, we’re trying to take the first step to improving both quality of life and equality by bringing smart financial advice catered to your banking data and financial goals--all through our agent, Mr. Wonderful, fine-tuned to be the best version of a finance bro — personalized for you.
+With [_smartFin_](https://github.com/ayushib4/smartFin), we’re trying to take the first step to improving both **quality of life and equality** by bringing smart financial advice catered to your banking data and financial goals–all through our agent, **Mr. Wonderful** 🕴️, fine-tuned to be the best version of a finance bro–personalized for you.
 
-> When in doubt, ask smartFin how one can make smarter financial decisions. Your transaction data and relevant inferences made by GPT is safely stored in smartFin's intelligent database, which is specially prompt-engineered to semantically handpick the most relevant, and often the most regrettable :( transactions. Mr. Wonderful, a generative AI agent, then uses his financial prowess to provide expert insights and advice for your financial peace of mind.
+> When in doubt, ask _smartFin_ how one can make smarter financial decisions. Your transaction data and relevant inferences made by GPT is safely stored in smartFin's intelligent vector database, powered by [PineCone](https://www.pinecone.io/), which is specially prompt-engineered to semantically handpick the most relevant, and often the most regrettable 😔 transactions. Mr. Wonderful, a generative AI agent, then uses his financial prowess to provide expert insights and advice for your financial peace of mind.
 
 # Contributing
 
@@ -21,4 +21,4 @@ Generative AI Agent We prompt-engineer an agent depending on user's long and sho
 
 ### Contributing
 
-See `CONTRIBUTING.md`
+See [CONTRIBUTING.md](CONTRIBUTING.md/)
