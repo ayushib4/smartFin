@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "226558553838",
+    "project_id": "smartfin-afa77",
+    "storage_bucket": "smartfin-afa77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226558553838:android:025a3ed165267616b88dff",
+        "android_client_info": {
+          "package_name": "com.example.smart_fin_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226558553838-dupngs8n60dbp0al2v15387tekkm14fd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-TOi8vmUnKISIfnwC4vKfd36AX7YTy4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226558553838-dupngs8n60dbp0al2v15387tekkm14fd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "226558553838-45k6ehi0ri4rs0ao1u3uqcsa7oekpipi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.smartFinFlutter.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
