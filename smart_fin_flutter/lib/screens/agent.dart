@@ -86,7 +86,7 @@ class _AgentState extends State<Agent> {
             Visibility(
               visible: visibility,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(32.0, 0.0, 16.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(32.0, 8.0, 16.0, 0.0),
                 child: Row(
                   children: [
                     OutlinedButton(
