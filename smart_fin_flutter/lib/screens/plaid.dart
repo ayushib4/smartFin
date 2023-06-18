@@ -116,7 +116,8 @@ class _PlaidState extends State<Plaid> {
         }),
       );
       final transactions = jsonDecode(response.body)['transactions'];
-      log(response.body);
+      final transactionsJSON = jsonEncode(transactions);
+      log(transactionsJSON);
 
       for (dynamic transaction in transactions) {
         final transactionId = transaction['transaction_id'];
