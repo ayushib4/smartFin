@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 PINECONE_API_KEY = getenv("PINECONE_API_KEY")
-PINECONE_ENV = getenv("PINECONE_ENVIRONMENT")
+PINECONE_ENV = getenv("PINECONE_ENV")
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
 
 
@@ -772,7 +772,7 @@ transactions = {
     ],
 }
 
-# create_pinecone_index(transactions["account_id"])
-# store_embeddings(transactions["account_id"], transactions["data"])
-# construct_prompt(transactions["account_id"], "What is my most stupid purchase?")
+create_pinecone_index(transactions["account_id"])
+store_embeddings(transactions["account_id"], transactions["data"])
+construct_prompt(transactions["account_id"], "What is my most stupid purchase?")
 construct_prompt(transactions["account_id"], "What is my most valuable purchase?")
