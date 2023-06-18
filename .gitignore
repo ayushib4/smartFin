@@ -2,3 +2,4 @@ __pycache__/
 backend/embedder/
 **/.env
 .DS_Store
+backend/firebase-credentials.json
