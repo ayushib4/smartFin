@@ -2,7 +2,7 @@ from langchain import FewShotPromptTemplate, LLMChain, PromptTemplate
 import openai
 from dotenv import load_dotenv
 from os import getenv
-from constants import INFERENCE_MODEL, PROMPT_PREFIX, PROMPT_SUFFIX
+from constants import INFERENCE_MODEL, PROMPT_EXAMPLES, PROMPT_PREFIX, PROMPT_SUFFIX
 from langchain.chat_models import ChatOpenAI
 
 load_dotenv()
@@ -19,7 +19,7 @@ class InferenceModel:
     def __init__(
         self,
         model_name=INFERENCE_MODEL,
-        prompt_examples: list[dict[str, str]] = [],
+        prompt_examples: list[dict[str, str]] = PROMPT_EXAMPLES,
     ) -> None:
         self.model_name = model_name
 
