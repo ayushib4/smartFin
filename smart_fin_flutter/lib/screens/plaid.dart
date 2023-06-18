@@ -6,8 +6,7 @@ import 'dart:convert';
 import 'package:plaid_flutter/plaid_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:developer';
-
-import 'package:smart_fin_flutter/screens/agent.dart';
+import 'package:smart_fin_flutter/screens/user.dart';
 
 class Plaid extends StatefulWidget {
   const Plaid({super.key});
@@ -166,23 +165,18 @@ class _PlaidState extends State<Plaid> {
           'user_id': accId,
         }),
       );
-      log(response.statusCode.toString());
 
-      goToAgent("angry",
-          "Hey there! I noticed you spent a lot of money at Apple this month (\$1K).");
+      goToUser();
     } else {
       log(response.body);
     }
   }
 
-  void goToAgent(String mood, String response) {
+  void goToUser() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Agent(
-          mood: mood,
-          response: response,
-        ),
+        builder: (context) => const User(),
       ),
     );
   }

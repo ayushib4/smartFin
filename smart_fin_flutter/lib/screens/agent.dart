@@ -44,6 +44,9 @@ class _AgentState extends State<Agent> {
   }
 
   void hideReactions() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Reacted!')),
+    );
     setState(() {
       visibility = false;
     });

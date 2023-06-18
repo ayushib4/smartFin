@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fin_flutter/screens/agent.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:smart_fin_flutter/screens/plaid.dart';
 import 'firebase_options.dart';
 
 Future main() async {
@@ -25,9 +25,7 @@ class SmartFin extends StatelessWidget {
         colorScheme: const ColorScheme.dark(background: Colors.black),
         useMaterial3: true,
       ),
-      home: const Agent(
-        mood: "sad",
-      ),
+      home: const Plaid(),
     );
   }
 }
