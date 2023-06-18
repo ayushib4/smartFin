@@ -25,7 +25,7 @@ from langchain.experimental.generative_agents import (
 
 class FinanceBro:
     def __init__(self, name: str, age: int, traits: str, status: str) -> None:
-        tommies_memory = GenerativeAgentMemory(
+        agent_memory = GenerativeAgentMemory(
             llm=LLM,
             memory_retriever=self._create_new_memory_retriever(),
             verbose=False,
@@ -40,7 +40,7 @@ class FinanceBro:
             status=status,
             memory_retriever=self._create_new_memory_retriever(),
             llm=LLM,
-            memory=tommies_memory,
+            memory=agent_memory,
         )
 
     def _relevance_score_fn(self, score: float) -> float:
@@ -81,7 +81,7 @@ class FinanceBro:
 
 if __name__ == "__main__":
     mr_wonderful = FinanceBro(
-        name="Tommie",
+        name="Kevin",
         age=25,
         traits="anxious, likes design, talkative",
         status="looking for a job",
@@ -89,13 +89,13 @@ if __name__ == "__main__":
 
     mr_wonderful._append_observations(
         [
-            "Tommie remembers his dog, Bruno, from when he was a kid",
-            "Tommie feels tired from driving so far",
-            "Tommie sees the new home",
+            "Kevin remembers his dog, Bruno, from when he was a kid",
+            "Kevin feels tired from driving so far",
+            "Kevin sees the new home",
             "The new neighbors have a cat",
             "The road is noisy at night",
-            "Tommie is hungry",
-            "Tommie tries to get some rest.",
+            "Kevin is hungry",
+            "Kevin tries to get some rest.",
         ]
     )
 
