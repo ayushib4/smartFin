@@ -106,14 +106,14 @@ PROMPT_EXAMPLES = [
 ]
 PROMPT_PREFIX = "Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions."
 PROMPT_SUFFIX = """
-Desired Format:
+Desired Format: 
 Psychographic Inferences: -||-
 Spending Habit Inferences: -||-
-Cost-effectiveness (out of 10) -||-
-Utility (out of 10) -||-
-Long-term benefits (out of 10) -||-
-Comparison with alternatives (out of 10) -||-
-Affordable (out of 10) -||-
+(High/Medium/Low) Cost-effectiveness 
+(High/Medium/Low) Utility 
+(High/Medium/Low) Long-term benefits
+(High/Medium/Low) Comparison with alternatives 
+(High/Medium/Low) Affordable
 """
 
 EXAMPLE_USER_ID = "G4N4PJzLPRFlljnkg6NvTp6er4PJyPiGKK8om"
