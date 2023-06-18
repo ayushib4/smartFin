@@ -119,10 +119,21 @@ class _PlaidState extends State<Plaid> {
       final transactionsJSON = jsonEncode(transactions);
       log(transactionsJSON);
 
+      String accId = "";
+
       for (dynamic transaction in transactions) {
         final transactionId = transaction['transaction_id'];
         final accountId = transaction['account_id'];
+        accId = accountId;
         final amount = transaction['amount'];
+        final authorizedDate = transaction['authorized_date'];
+        final authorizedDatetime = transaction['authorized_datetime'];
+        final datetime = transaction['datetime'];
+        final category = transaction['category'];
+        final merchantName = transaction['merchant_name'];
+        final pending = transaction['pending'];
+        final personalFinanceCategory =
+            transaction['personal_finance_category'];
         final date = transaction['date'];
         final location = transaction['location'];
         final name = transaction['name'];
@@ -136,8 +147,26 @@ class _PlaidState extends State<Plaid> {
           'location': location,
           'name': name,
           'payment_channel': paymentChannel,
+          'authorized_date': authorizedDate,
+          'authorized_datetime': authorizedDatetime,
+          'datetime': datetime,
+          'category': category,
+          'merchant_name': merchantName,
+          'pending': pending,
+          'personal_finance_category': personalFinanceCategory,
         });
       }
+
+      response = await http.post(
+        Uri.parse('http://10.168.1.58:5000/trigger-core'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'account_id': accId,
+        }),
+      );
+      log(response.statusCode.toString());
 
       goToAgent();
     } else {
