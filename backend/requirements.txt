@@ -1,5 +1,5 @@
 black==23.3.0
-flas==2.3.2
+flask==2.3.2
 pinecone-client==2.2.2
 python-dotenv==1.0.0
 semantic-kernel==0.3.1.dev0
