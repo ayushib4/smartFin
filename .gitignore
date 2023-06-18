@@ -1,4 +1,5 @@
+.vscode/
 __pycache__/
 backend/embedder/
 **/.env
-.DS_Store
+**/.DS_Store
