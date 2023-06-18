@@ -42,5 +42,7 @@ def construct_prompt(user_id, query):
     query_embedding = get_embedding(query)
     index = pinecone.Index(f"{user_id}-transactions")
     response = index.query(query_embedding, top_k=5, include_metadata=True)
-    return response 
-    contexts = [x["metadata"]["inference"] for x in response["matches"]] # replace inference with fields relevant for contexts 
+    return response
+    contexts = [
+        x["metadata"]["inference"] for x in response["matches"]
+    ]  # replace inference with fields relevant for contexts
