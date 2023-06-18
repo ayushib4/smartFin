@@ -7,14 +7,16 @@ import 'package:plaid_flutter/plaid_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:developer';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+import 'package:smart_fin_flutter/screens/agent.dart';
+
+class Plaid extends StatefulWidget {
+  const Plaid({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Plaid> createState() => _PlaidState();
 }
 
-class _HomeState extends State<Home> {
+class _PlaidState extends State<Plaid> {
   LinkConfiguration? _configuration;
   StreamSubscription<LinkEvent>? _streamEvent;
   StreamSubscription<LinkExit>? _streamExit;
@@ -94,53 +96,59 @@ class _HomeState extends State<Home> {
 
     if (response.statusCode == 200) {
       accessToken = await jsonDecode(response.body)['access_token'];
-      // print("Access token: $accessToken");
+
+      response = await http.post(
+        Uri.parse('https://sandbox.plaid.com/transactions/get'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'client_id': dotenv.env["PLAID_CLIENT_ID"].toString(),
+          'secret': dotenv.env["PLAID_SECRET"].toString(),
+          'access_token': accessToken,
+          'start_date': '2018-01-01',
+          'end_date': '2023-01-01',
+          'options': {
+            'count': 250,
+            'offset': 100,
+            'include_personal_finance_category': true,
+          },
+        }),
+      );
+      final transactions = jsonDecode(response.body)['transactions'];
+      log(response.body);
+
+      for (dynamic transaction in transactions) {
+        final transactionId = transaction['transaction_id'];
+        final accountId = transaction['account_id'];
+        final amount = transaction['amount'];
+        final date = transaction['date'];
+        final location = transaction['location'];
+        final name = transaction['name'];
+        final paymentChannel = transaction['payment_channel'];
+
+        FirebaseFirestore.instance.collection(accountId).add({
+          'transaction_id': transactionId,
+          'account_id': accountId,
+          'amount': amount,
+          'date': date,
+          'location': location,
+          'name': name,
+          'payment_channel': paymentChannel,
+        });
+      }
+
+      goToAgent();
     } else {
       log(response.body);
     }
   }
 
-  void getTransactions() async {
-    http.Response response = await http.post(
-      Uri.parse('https://sandbox.plaid.com/transactions/get'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'client_id': dotenv.env["PLAID_CLIENT_ID"].toString(),
-        'secret': dotenv.env["PLAID_SECRET"].toString(),
-        'access_token': accessToken,
-        'start_date': '2018-01-01',
-        'end_date': '2023-01-01',
-        'options': {
-          'count': 250,
-          'offset': 100,
-          'include_personal_finance_category': true,
-        },
-      }),
+  void goToAgent() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Agent()),
     );
-    final transactions = jsonDecode(response.body)['transactions'];
-    log("TRANSACTION DATA:\n$transactions");
-
-    for (dynamic transaction in transactions) {
-      final transactionId = transaction['transaction_id'];
-      final accountId = transaction['account_id'];
-      final amount = transaction['amount'];
-      final date = transaction['date'];
-      final location = transaction['location'];
-      final name = transaction['name'];
-      final paymentChannel = transaction['payment_channel'];
-
-      FirebaseFirestore.instance.collection(accountId).add({
-        'transaction_id': transactionId,
-        'account_id': accountId,
-        'amount': amount,
-        'date': date,
-        'location': location,
-        'name': name,
-        'payment_channel': paymentChannel,
-      });
-    }
   }
 
   @override
@@ -165,13 +173,6 @@ class _HomeState extends State<Home> {
               child: ElevatedButton(
                 onPressed: _createLinkTokenConfiguration,
                 child: const Text("Sign in with Plaid"),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
-              child: ElevatedButton(
-                onPressed: () => getTransactions(),
-                child: const Text("Get Transactions"),
               ),
             ),
           ],
