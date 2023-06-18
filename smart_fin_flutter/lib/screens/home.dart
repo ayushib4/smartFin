@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -118,8 +119,28 @@ class _HomeState extends State<Home> {
         },
       }),
     );
-    var transactions = jsonDecode(response.body)['transactions'];
+    final transactions = jsonDecode(response.body)['transactions'];
     log("TRANSACTION DATA:\n$transactions");
+
+    for (dynamic transaction in transactions) {
+      final transactionId = transaction['transaction_id'];
+      final accountId = transaction['account_id'];
+      final amount = transaction['amount'];
+      final date = transaction['date'];
+      final location = transaction['location'];
+      final name = transaction['name'];
+      final paymentChannel = transaction['payment_channel'];
+
+      FirebaseFirestore.instance.collection(accountId).add({
+        'transaction_id': transactionId,
+        'account_id': accountId,
+        'amount': amount,
+        'date': date,
+        'location': location,
+        'name': name,
+        'payment_channel': paymentChannel,
+      });
+    }
   }
 
   @override
