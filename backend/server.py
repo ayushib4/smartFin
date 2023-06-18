@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import firestore, credentials
 from os import getenv
 from dotenv import load_dotenv
+from pinecone_script import init_pinecone
 
 load_dotenv()
 
@@ -21,7 +22,7 @@ def trigger_core_services():
         coll_ref = firestore_client.collection(user_id)
         docs = coll_ref.stream()
         data = [doc.to_dict() for doc in docs]
-        # insert pinecone function
+        # init_pinecone(user_id, data)  # NOTE: Hidden for demo
         return "200"
     except Exception as e:
         return {"error": str(e)}, 400
