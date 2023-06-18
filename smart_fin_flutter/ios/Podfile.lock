@@ -744,12 +744,15 @@ PODS:
     - Flutter
     - Plaid (= 4.4.0)
   - PromisesObjC (2.2.0)
+  - video_player_avfoundation (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - plaid_flutter (from `.symlinks/plugins/plaid_flutter/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
 
 SPEC REPOS:
   trunk:
@@ -776,6 +779,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   plaid_flutter:
     :path: ".symlinks/plugins/plaid_flutter/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/ios"
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
@@ -795,6 +800,7 @@ SPEC CHECKSUMS:
   Plaid: 29a5506900d372d6d3d77199090b9a7a3af475bd
   plaid_flutter: 25664c647a7a374249b44a397611d167cd0e7ade
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
+  video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
 
 PODFILE CHECKSUM: 6b9eb94e9f98a329f2ef624b852a6e42d090af2b
 

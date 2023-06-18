@@ -175,9 +175,14 @@ class _PlaidState extends State<Plaid> {
   }
 
   void goToAgent() {
+    log("going to agent");
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const Agent()),
+      MaterialPageRoute(
+        builder: (context) => const Agent(
+          mood: "angry",
+        ),
+      ),
     );
   }
 

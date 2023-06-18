@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_fin_flutter/screens/plaid.dart';
+import 'package:smart_fin_flutter/screens/agent.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -21,10 +21,12 @@ class SmartFin extends StatelessWidget {
     return MaterialApp(
       title: 'SmartFin',
       theme: ThemeData(
-        colorScheme: const ColorScheme.dark(),
+        colorScheme: const ColorScheme.dark(background: Colors.black),
         useMaterial3: true,
       ),
-      home: const Plaid(),
+      home: const Agent(
+        mood: "sad",
+      ),
     );
   }
 }
