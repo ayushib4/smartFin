@@ -29,7 +29,7 @@ def store_embeddings(user_id, data):
         upsert_response[i] = (
             data[i]["transaction_id"],
             get_embedding(data[i]),
-            {data[i]["inference"]},
+            {data[i]},
         )
 
     index.upsert(vectors=upsert_response)
@@ -38,38 +38,6 @@ def store_embeddings(user_id, data):
 def construct_prompt(user_id, query):
     query_embedding = get_embedding(query)
     index = pinecone.Index(f"{user_id}-transactions")
-    response = index.query(query_embedding, top_k=3, include_metadata=True)
-    contexts = [x["metadata"]["inference"] for x in response["matches"]]
-
-def semantic_search(user_id):
-    # now connect to the index
-    index = pinecone.GRPCIndex(f"{user_id}")
-
-    batch_size = 128
-    questions = []  # list of questions
-
-    for i in tqdm(range(0, len(questions), batch_size)):
-        # find end of batch
-        i_end = min(i + batch_size, len(questions))
-        # create IDs batch
-        ids = [str(x) for x in range(i, i_end)]
-        # create metadata batch
-        metadatas = [{"text": text} for text in questions[i:i_end]]
-        # create embeddings
-        xc = get_embedding(questions[i:i_end])
-        # create records list for upsert
-        records = zip(ids, xc, metadatas)
-        # upsert to Pinecone
-        index.upsert(vectors=records)
-
-    # check number of records in the index
-    index.describe_index_stats()
-
-    query = "which city has the highest population in the world?"
-
-    # create the query vector
-    xq = get_embedding(query).tolist()
-
-    # now query
-    xc = index.query(xq, top_k=5, include_metadata=True)
-    return xc
+    response = index.query(query_embedding, top_k=5, include_metadata=True)
+    return response 
+    contexts = [x["metadata"]["inference"] for x in response["matches"]] # replace inference with fields relevant for contexts 
