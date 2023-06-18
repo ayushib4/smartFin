@@ -32,7 +32,6 @@ class FinanceBro:
             reflection_threshold=8,  # we will give this a relatively low number to show how reflection works
         )
 
-        # TODO: Allow user input to define the agent
         # TODO: Cache agent or run as a temporary instance
         self.agent = GenerativeAgent(
             name=name,
