@@ -3,7 +3,7 @@ EMBEDDING_MODEL = "multi-qa-MiniLM-L6-cos-v1"  # From HuggingFace
 INFERENCE_MODEL = "gpt-4"  # From OpenAI
 DIMENSIONS = 128
 
-PROMPT_EXAMPLES = examples = [
+PROMPT_EXAMPLES = [
     {
         "question": """ 
                 Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions. 
@@ -15,38 +15,7 @@ PROMPT_EXAMPLES = examples = [
                 Highlight which purchases were good financial decisions and which purchases were bad financial decisions.
 
                 Example Transaction:
-                {"transactions": [
-                {
-                "amount": 2307.21,
-                "iso_currency_code": "USD",
-                "category": [
-                "Shops",
-                "Computers and Electronics"
-                ],
-                "category_id": "19013000",
-                "date": "2017-01-29",
-                "datetime": "2017-01-27T11:00:00Z",
-                "authorized_date": "2017-01-27",
-                "authorized_datetime": "2017-01-27T10:34:50Z",
-                "location": {
-                "address": "300 Post St",
-                "city": "San Francisco",
-                "region": "CA",
-                "postal_code": "94108",
-                "country": "US",
-                "lat": 40.740352,
-                "lon": -74.001761,
-                "store_number": "1235"
-                },
-                "name": "Apple Store",
-                "merchant_name": "Apple",
-                "payment_channel": "in store",
-                "personal_finance_category": {
-                "primary": "GENERAL_MERCHANDISE",
-                "detailed": "GENERAL_MERCHANDISE_ELECTRONICS"
-                },
-                }
-                ]
+                amount: 2307.21. authorized_date: 2017-01-27. authorized_datetime: 2017-01-27T10:34:50Z. category: ['Shops', 'Computers and Electronics']. date: 2017-01-29. datetime: 2017-01-27T11:00:00Z. location: 300 Post St, San Francisco, US, 94108. merchant_name: Apple. name: Apple Store. payment_channel: in store. personal_finance_category: GENERAL_MERCHANDISE_ELECTRONICS.
                 """,
         "answer": """
                 Example Inference: 
@@ -94,39 +63,7 @@ PROMPT_EXAMPLES = examples = [
                 Highlight which purchases were good financial decisions and which purchases were bad financial decisions.
 
                 Example Transaction:
-                {
-                "transactions": [
-                    {
-                    "amount”: 2.97,
-                    "iso_currency_code": "USD",
-                    "category": [
-                        "Food and Drink",
-                        “Fast-Food”
-                    ],
-                    "category_id": "13005000",
-                    "date": "2023-06-17",
-                    "datetime": "2023-06-17T19:30:00Z",
-                    "authorized_date": "2023-06-17",
-                    "authorized_datetime": "2023-06-17T19:30:00Z",
-                    "location": {
-                        "address": “1530 3rd Ave",
-                        "city": “Seattle”,
-                        "region": “WA”,
-                        "postal_code": “98101”,
-                        "country": "US",
-                        "lat": 47.610693,
-                        "lon": -122.338224,
-                    },
-                    "name": “McDonald's”,
-                    "merchant_name": “McDonald's”,
-                    "payment_channel": "in store",
-                    "personal_finance_category": {
-                        "primary": “FAST-FOOD”,
-                        "detailed": “FAST-FOOD“
-                    }
-                    }
-                ]
-                }
+                amount: 2.97. authorized_date: 2023-06-17. authorized_datetime: 2023-06-17T19:30:00Z. category: ['Food and Drink', 'Fast-Food']. date: 2023-06-17. datetime: 2023-06-17T19:30:00Z. location: 1530 3rd Ave, Seattle, US, 98101. merchant_name: McDonald's. name: McDonald's. payment_channel: in store. personal_finance_category: FAST-FOOD.
                 """,
         "answer": """
                 Psychographic Inferences:
