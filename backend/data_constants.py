@@ -1,7 +1,3 @@
-# Models
-EMBEDDING_MODEL = "multi-qa-MiniLM-L6-cos-v1"  # From HuggingFace, see https://www.sbert.net/docs/pretrained_models.html#sentence-embedding-models/
-INFERENCE_MODEL = "gpt-4"  # From OpenAI
-
 # Prompt Inputs
 PROMPT_EXAMPLES = [
     {

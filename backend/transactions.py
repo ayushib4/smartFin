@@ -1,13 +1,14 @@
 import time
+from typing import Iterable
 import pinecone
 from os import getenv
-from constants import (
+from data_constants import (
     PROMPT_EXAMPLES,
-    EXAMPLE_LESS_USER_ID,
-    EXAMPLE_LESS_TRANSACTIONS,
+    EXAMPLE_USER_ID,
+    EXAMPLE_TRANSACTIONS,
 )
 from inference import InferenceModel
-from embeddings import EmbeddingModel
+from embedding import EmbeddingModel
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,14 +30,13 @@ EMBEDDABLE_FIELDS = [
 ]
 
 
-class UserTransactionsInterface:
+class TransactionsInterface:
     """
     A database interface for semantic search on user transactions
     """
 
     def __init__(
         self,
-        user_id: str,
         inference_model: InferenceModel,
         embedding_model: EmbeddingModel,
     ) -> None:
@@ -45,7 +45,6 @@ class UserTransactionsInterface:
             environment=getenv("PINECONE_ENV") or "",
         )
 
-        self.user_id = user_id
         self._inference_model = inference_model
         self._embedding_model = embedding_model
 
@@ -65,34 +64,31 @@ class UserTransactionsInterface:
 
         return
 
-    def add_transactions(self, transactions: list[dict]) -> None:
+    def add_transactions(self, user_id: str, transactions: Iterable[dict]) -> None:
         assert self.is_indexed()
 
-        num_transactions = len(transactions)
+        vectors: list[tuple[str, str, dict]] = []
+        count = 0
 
-        for i in range(0, num_transactions, BATCH_SIZE):
-            vectors: list[tuple[str, str, dict]] = []
+        for transaction in transactions:
+            if count > 0 and count % BATCH_SIZE == 0:
+                self.index.upsert(vectors)
+                vectors.clear()
+                continue
 
-            for j in range(i, min(num_transactions, i + BATCH_SIZE)):
-                data = self._stringify_transaction(transactions[j])
+            transaction_str = self._stringify_transaction(transaction)
 
-                # print("Inference start " + str(time.time()))
-
-                # inference = self._inference_model.infer(transaction)
-
-                # print("Inference end " + str(time.time()))
-
-                vectors.append(
-                    (
-                        transactions[j]["transaction_id"],
-                        self._embedding_model.embed(data),
-                        {"user_id": self.user_id, "data": data},
-                    )
+            vectors.append(
+                (
+                    transaction["transaction_id"],
+                    self._embedding_model.embed(transaction_str),
+                    {"user_id": user_id, "transaction": transaction_str},
                 )
+            )
 
-            self.index.upsert(vectors)
+            count += 1
 
-        print(f"Finished adding {num_transactions} transactions.")
+        print(f"Added {count} transactions.")
 
     def _stringify_transaction(self, transaction: dict) -> str:
         assert self.is_indexed()
@@ -106,18 +102,20 @@ class UserTransactionsInterface:
 
             data = transaction[field]
 
+            formatted_field = field.replace("_", " ").title()
+
             if field == "location":
                 strs.append(
                     f"{field}: {data['address']}, {data['city']}, {data['country']}, {data['postal_code']}."
                 )
             elif field == "personal_finance_category":
-                strs.append(f"{field.capitalize()}: {data['detailed']}.")
+                strs.append(f"{formatted_field}: {data['detailed']}.")
             else:
-                strs.append(f"{field.capitalize()}: {data}.")
+                strs.append(f"{formatted_field}: {data}.")
 
         return " ".join(strs)
 
-    def query(self, query: str, num_results=1) -> list[dict[float, str]]:
+    def query(self, user_id: str, query: str, num_results=5) -> list[dict[float, str]]:
         assert self.is_indexed()
 
         query_embedding = self._embedding_model.embed(query)
@@ -125,11 +123,11 @@ class UserTransactionsInterface:
         responses = self.index.query(
             query_embedding,
             top_k=num_results,
-            filter={"user_id": {"$eq": self.user_id}},
+            filter={"user_id": {"$eq": user_id}},
             include_metadata=True,
         )["matches"]
 
-        return [{r["score"]: f"{r['metadata']['data']}"} for r in responses]  # type: ignore
+        return [{r["score"]: f"{r['metadata']['transaction']}"} for r in responses]  # type: ignore
 
     def is_indexed(self) -> bool:
         return PINECONE_INDEX in pinecone.list_indexes()
@@ -138,14 +136,15 @@ class UserTransactionsInterface:
 if __name__ == "__main__":
     print("Start " + str(time.time()))
 
-    transactions_interface = UserTransactionsInterface(
-        EXAMPLE_LESS_USER_ID,
+    transactions_interface = TransactionsInterface(
         InferenceModel(prompt_examples=PROMPT_EXAMPLES),
         EmbeddingModel(),
     )
 
-    transactions_interface.add_transactions(EXAMPLE_LESS_TRANSACTIONS)
+    transactions_interface.add_transactions(EXAMPLE_USER_ID, EXAMPLE_TRANSACTIONS)
     print("Done storing " + str(time.time()))
-    response = transactions_interface.query("What is my most stupid purchase?")
+    response = transactions_interface.query(
+        EXAMPLE_USER_ID, "What is my most stupid purchase?"
+    )
     print(response)
     print("Done querying " + str(time.time()))

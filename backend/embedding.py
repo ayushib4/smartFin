@@ -1,11 +1,8 @@
 from sentence_transformers import SentenceTransformer
-from torch import Tensor
-
-from constants import EMBEDDING_MODEL
 
 
 class EmbeddingModel:
-    def __init__(self, model_id=EMBEDDING_MODEL):
+    def __init__(self, model_id="multi-qa-MiniLM-L6-cos-v1"):
         self.model = SentenceTransformer(model_id, cache_folder="embedder")
 
     def embed(self, input: str, debug=False) -> list[float]:
