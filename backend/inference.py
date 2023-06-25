@@ -39,5 +39,5 @@ class InferenceModel:
             llm=ChatOpenAI(temperature=0, model=model_name), prompt=prompt
         )
 
-    def infer_from_transaction(self, transaction: str) -> str:
+    def infer(self, transaction: str) -> str:
         return self.chain.run(PROMPT_PREFIX + transaction + PROMPT_SUFFIX)

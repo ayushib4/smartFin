@@ -1,8 +1,8 @@
 # Models
-EMBEDDING_MODEL = "multi-qa-MiniLM-L6-cos-v1"  # From HuggingFace
+EMBEDDING_MODEL = "multi-qa-MiniLM-L6-cos-v1"  # From HuggingFace, see https://www.sbert.net/docs/pretrained_models.html#sentence-embedding-models/
 INFERENCE_MODEL = "gpt-4"  # From OpenAI
-DIMENSIONS = 128
 
+# Prompt Inputs
 PROMPT_EXAMPLES = [
     {
         "question": """ 
@@ -116,6 +116,7 @@ Spending Habit Inferences: -||-
 (High/Medium/Low) Affordable
 """
 
+# Transactions
 EXAMPLE_USER_ID = "G4N4PJzLPRFlljnkg6NvTp6er4PJyPiGKK8om"
 EXAMPLE_TRANSACTIONS = [
     {
@@ -795,6 +796,94 @@ EXAMPLE_TRANSACTIONS = [
         "personal_finance_category": {
             "primary": "TRAVEL",
             "detailed": "TRANSPORTATION",
+        },
+    },
+]
+
+EXAMPLE_LESS_USER_ID = "less-user-id"
+EXAMPLE_LESS_TRANSACTIONS = [
+    {
+        "transaction_id": "0",
+        "amount": 24.99,
+        "iso_currency_code": "USD",
+        "category": ["Food and Drink", "Restaurants"],
+        "category_id": "13005000",
+        "date": "2023-06-17",
+        "datetime": "2023-06-17T12:15:00Z",
+        "authorized_date": "2023-06-17",
+        "authorized_datetime": "2023-06-17T12:15:00Z",
+        "location": {
+            "address": "456 Elm St",
+            "city": "Anytown",
+            "region": "CA",
+            "postal_code": "12345",
+            "country": "US",
+            "lat": 37.123456,
+            "lon": -122.123456,
+            "store_number": "987",
+        },
+        "name": "Tasty Burgers",
+        "merchant_name": "Tasty Burgers",
+        "payment_channel": "in store",
+        "personal_finance_category": {
+            "primary": "RESTAURANTS",
+            "detailed": "RESTAURANTS",
+        },
+    },
+    {
+        "transaction_id": "1",
+        "amount": 19.95,
+        "iso_currency_code": "USD",
+        "category": ["Shopping", "Clothing"],
+        "category_id": "19012000",
+        "date": "2023-06-16",
+        "datetime": "2023-06-16T17:30:00Z",
+        "authorized_date": "2023-06-16",
+        "authorized_datetime": "2023-06-16T17:30:00Z",
+        "location": {
+            "address": "789 Oak St",
+            "city": "Somewhere",
+            "region": "NY",
+            "postal_code": "54321",
+            "country": "US",
+            "lat": 40.987654,
+            "lon": -74.987654,
+            "store_number": "654",
+        },
+        "name": "Fashion Emporium",
+        "merchant_name": "Fashion Emporium",
+        "payment_channel": "in store",
+        "personal_finance_category": {
+            "primary": "APPAREL_AND_SERVICES",
+            "detailed": "APPAREL_AND_ACCESSORIES",
+        },
+    },
+    {
+        "transaction_id": "1",
+        "amount": 45.75,
+        "iso_currency_code": "USD",
+        "category": ["Food and Drink", "Groceries"],
+        "category_id": "13005032",
+        "date": "2023-06-15",
+        "datetime": "2023-06-15T09:45:00Z",
+        "authorized_date": "2023-06-15",
+        "authorized_datetime": "2023-06-15T09:45:00Z",
+        "location": {
+            "address": "123 Market St",
+            "city": "Cityville",
+            "region": "CA",
+            "postal_code": "98765",
+            "country": "US",
+            "lat": 38.765432,
+            "lon": -121.765432,
+            "store_number": "321",
+        },
+        "name": "Fresh Mart",
+        "merchant_name": "Fresh Mart",
+        "payment_channel": "in store",
+        "personal_finance_category": {
+            "primary": "GROCERIES",
+            "detailed": "GROCERIES",
         },
     },
 ]

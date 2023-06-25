@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from flask import g
 import finance_bro
 import random
-from pinecone_script import init_pinecone
 
 load_dotenv()
 
