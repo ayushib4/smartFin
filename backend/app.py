@@ -12,18 +12,16 @@ def index() -> str:
     return "<h1>smartFin Flask Server!</h1>"
 
 
-# TODO: Enable Firestore and parse JSON object into `add_transactions`
+# TODO: Verify FIRESTORE_CLIENT and parse JSON object into `add_transactions`
 @app.route("/add-user", methods=["GET"])
 def add_user() -> str:
-    # data = request.get_json()
-    # user_id = data["user_id"]
+    data = request.get_json()
+    user_id = data["user_id"]
 
-    # TRANSACTIONS_INTERFACE.add_transactions(
-    #     user_id,
-    #     (doc.to_dict() for doc in FIRESTORE_CLIENT.collection(user_id).stream()),
-    # )
-
-    TRANSACTIONS_INTERFACE.add_transactions(EXAMPLE_USER_ID, EXAMPLE_TRANSACTIONS)
+    TRANSACTIONS_INTERFACE.add_transactions(
+        user_id,
+        (doc.to_dict() for doc in FIRESTORE_CLIENT.collection(user_id).stream()),
+    )
 
     return "Added user transactions"
 
