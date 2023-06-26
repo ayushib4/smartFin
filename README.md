@@ -18,6 +18,22 @@ Embedding and Semantic Search We then embed the transaction data and inferences 
 
 Generative AI Agent We prompt-engineer an agent depending on user's long and short-term goals to generate valid questions if the user doesn't pass in questions to the agent. These questions are used to query PineCone, which LangChain's Generative AI Agent then analyses and provides insight into how spending habits can be improved based on the goals provided by the user.
 
-### Contributing
+## Development
+
+### `backend`
+
+Some files have `__main__` methods that contain simple tests/demos.
+
+Please run this in a virtual environment. Tested with Python 3.11.1.
+
+```
+pip install -r requirements.txt
+
+flask run [--debug]
+```
+
+### `smart_fin_flutter`
+
+IDK:)
 
 See [CONTRIBUTING.md](CONTRIBUTING.md/)

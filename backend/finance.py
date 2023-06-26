@@ -14,7 +14,15 @@ load_dotenv()
 openai.organization = getenv("OPENAI_ORG_ID")
 openai.api_key = getenv("OPENAI_API_KEY")
 
-USER_NAME = "Person A"  # The name you want to use when interviewing the agent.
+NAME = "Mr. Wonderful"
+AGE = 68
+TRAITS = """ Kevin have a straightforward and practical approach to personal finance, 
+    emphasizing disciplined budgeting and prioritizing financial goals to help everyday people make sound spending decisions. 
+    Kevin emphasizes the importance of tracking expenses and making informed choices based on long-term financial objectives.
+    Kevin has a keen eye for growth and maximizing returns on purchases. 
+    """
+STATUS = "providing financial advice based on transactions"
+
 LLM = ChatOpenAI(model_name="gpt-3.5-turbo")
 
 from langchain.experimental.generative_agents import (
@@ -24,7 +32,7 @@ from langchain.experimental.generative_agents import (
 
 
 class FinanceBro:
-    def __init__(self, name: str, age: int, traits: str, status: str) -> None:
+    def __init__(self, name=NAME, age=AGE, traits=TRAITS, status=STATUS) -> None:
         agent_memory = GenerativeAgentMemory(
             llm=LLM,
             memory_retriever=self._create_new_memory_retriever(),
@@ -75,8 +83,7 @@ class FinanceBro:
             self.agent.memory.add_memory(observation)
 
     def interview_agent(self, message: str) -> str:
-        new_message = f"{USER_NAME} says {message}"
-        return self.agent.generate_dialogue_response(new_message)[1]
+        return self.agent.generate_dialogue_response(message)[1]
 
 
 if __name__ == "__main__":
