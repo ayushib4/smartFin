@@ -2,7 +2,12 @@ from langchain import FewShotPromptTemplate, LLMChain, PromptTemplate
 import openai
 from dotenv import load_dotenv
 from os import getenv
-from data_constants import PROMPT_EXAMPLES, PROMPT_PREFIX, PROMPT_SUFFIX
+from data_constants import (
+    PROMPT_TEMPLATE,
+    PROMPT_PREFIX,
+    PROMPT_SUFFIX,
+    PROMPT_EXAMPLES,
+)
 from langchain.chat_models import ChatOpenAI
 
 load_dotenv()
@@ -23,16 +28,15 @@ class InferenceModel:
     ) -> None:
         self.model_name = model_name
 
-        example_prompt = PromptTemplate(
-            input_variables=list(prompt_examples[0].keys()),
-            template="Question: {question}\n{answer}",
-        )
-
         prompt = FewShotPromptTemplate(
             examples=prompt_examples,
-            example_prompt=example_prompt,
-            suffix="Question: {input}",
-            input_variables=["input"],
+            example_prompt=PromptTemplate(
+                input_variables=list(prompt_examples[0].keys()),
+                template=PROMPT_TEMPLATE,
+            ),
+            prefix=PROMPT_PREFIX,
+            suffix=PROMPT_SUFFIX,
+            input_variables=["query"],
         )
 
         self.chain = LLMChain(
@@ -40,4 +44,4 @@ class InferenceModel:
         )
 
     def infer(self, transaction: str) -> str:
-        return self.chain.run(PROMPT_PREFIX + transaction + PROMPT_SUFFIX)
+        return self.chain.run(transaction)
