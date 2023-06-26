@@ -1,5 +1,53 @@
 # Prompt Inputs
+PROMPT_TEMPLATE = """
+Transaction: {query}
+
+{output}
+"""
+
+PROMPT_PREFIX = """
+The following are example transaction metadata inputs with outputs of relevant inferences and descriptors. You must infer financial, demographic, and other relevant qualities about the following financial transaction to aid categorizing transactions, providing financial advice to the buyer, etc. You should analyze and research the transaction details, considering what the name, cost, location, date, etc. imply about itself and the buyer. Provide bullets about the buyer and transaction inferences, and descriptive key phrases about the transaction to aid in semantic searching and classification. This can include comments or phrases about affordability, return of investment, etc.
+
+Examples:
+"""
+
+PROMPT_SUFFIX = """
+Transaction: {query}
+"""
+
 PROMPT_EXAMPLES = [
+    {
+        "query": """ 
+amount: 2307.21. authorized_date: 2017-01-27. authorized_datetime: 2017-01-27T10:34:50Z. category: ['Shops', 'Computers and Electronics']. date: 2017-01-29. datetime: 2017-01-27T11:00:00Z. location: 300 Post St, San Francisco, US, 94108. merchant_name: Apple. name: Apple Store. payment_channel: in store. personal_finance_category: GENERAL_MERCHANDISE_ELECTRONICS.
+                """,
+        "output": """
+Inferences:
+- Buyer is wealthy enough or otherwise able to afford a very expensive purchase
+- Apple is a premium brand and San Francisco is a very high cost of living area, so buyer is likely middle class or higher
+- Transaction is likely for a laptop or possible several phones or other devices
+- Buyer may be a college student or professional investing in technology or simply buying an expensive gift, although date of January 27 is not usually the start of school semester, holiday, or other major event
+
+Descriptors:
+long-term investment, very expensive, special purchase, Apple, San Francisco, Bay Area, technology, laptop, phone, gift, college, professional, wealthy, middle class, high cost of living, consumer electronics
+                """,
+    },
+    {
+        "query": """ 
+amount: 2.97. authorized_date: 2023-06-17. authorized_datetime: 2023-06-17T19:30:00Z. category: ['Food and Drink', 'Fast-Food']. date: 2023-06-17. datetime: 2023-06-17T19:30:00Z. location: 1530 3rd Ave, Seattle, US, 98101. merchant_name: McDonald's. name: McDonald's. payment_channel: in store. personal_finance_category: FAST-FOOD.
+                """,
+        "output": """
+Inferences:
+– Small fast-food purchase could be for a snack, but unlikely for a meal unless the buyer is particularly frugal, possibly a college student
+- McDonalds is an everyday affordable fast-food option and Seattle is a high cost of living area, so the buyer could be a middle or lower class individual
+- Items costing $2.97 are likely a drink, fries, or other side item, or possibly a small burger at McDonald's
+
+Descriptors:
+fast-food, cheap, unhealthy, snack, drink, fries, side item, burger, McDonalds, Seattle, college, middle class, lower class, high cost of living, poor, quick, mobile, convenient
+                """,
+    },
+]
+
+OLD_PROMPT_EXAMPLES = [
     {
         "question": """ 
                 Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions. 
@@ -100,8 +148,8 @@ PROMPT_EXAMPLES = [
                 """,
     },
 ]
-PROMPT_PREFIX = "Infer demographic and psychographic qualities about the user and their spending habits based on the following transactions."
-PROMPT_SUFFIX = """
+
+OLD_PROMPT_SUFFIX = """
 Desired Format: 
 Psychographic Inferences: -||-
 Spending Habit Inferences: -||-
