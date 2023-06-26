@@ -1,11 +1,8 @@
 from flask import Flask, request
-from dotenv import load_dotenv
 from server_constants import *
 from data_constants import *
 
 import random
-
-load_dotenv()
 
 app = Flask(__name__)
 
@@ -25,6 +22,7 @@ def add_user() -> str:
     #     user_id,
     #     (doc.to_dict() for doc in FIRESTORE_CLIENT.collection(user_id).stream()),
     # )
+
     TRANSACTIONS_INTERFACE.add_transactions(EXAMPLE_USER_ID, EXAMPLE_TRANSACTIONS)
 
     return "Added user transactions"
