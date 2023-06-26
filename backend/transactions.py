@@ -1,6 +1,5 @@
 from time import time
 from typing import Iterable
-import pinecone
 from os import getenv
 from data_constants import (
     EXAMPLE_USER_ID,
@@ -9,7 +8,9 @@ from data_constants import (
 from inference import InferenceModel
 from embedding import EmbeddingModel
 from dotenv import load_dotenv
-from tqdm import tqdm
+
+import pinecone
+from concurrent.futures import ProcessPoolExecutor, wait
 
 load_dotenv()
 
@@ -59,36 +60,30 @@ class TransactionsInterface:
 
         self.index = pinecone.Index(PINECONE_INDEX)
 
+    def _add_transaction(self, user_id: str, transaction: dict):
+        transaction_str = self._stringify_transaction(transaction)
+        inference_str = self._inference_model.infer(transaction_str)
+
+        self.index.upsert(
+            [
+                transaction["transaction_id"],
+                self._embedding_model.embed(transaction_str + inference_str),
+                {
+                    "user_id": user_id,
+                    "transaction": transaction_str,
+                    "inference": inference_str,
+                },
+            ]
+        )
+
     def add_transactions(self, user_id: str, transactions: Iterable[dict]) -> None:
-        vectors: list[tuple[str, str, dict[str, str]]] = []
-        count = 0
-        start_time = time()
-
-        for transaction in tqdm(transactions):
-            if count > 0 and count % BATCH_SIZE == 0:
-                self.index.upsert(vectors)
-                vectors.clear()
-                continue
-
-            transaction_str = self._stringify_transaction(transaction)
-
-            vectors.append(
-                (
-                    transaction["transaction_id"],
-                    self._embedding_model.embed(transaction_str),
-                    {
-                        "user_id": user_id,
-                        "transaction": transaction_str,
-                    },
-                )
-            )
-
-            count += 1
-
-        if vectors:
-            self.index.upsert(vectors)
-
-        print(f"Added {count} transactions in {time() - start_time}s.")
+        executor = ProcessPoolExecutor(10)
+        wait(
+            [
+                executor.submit(self._add_transaction, user_id, transaction)
+                for transaction in transactions
+            ]
+        )
 
     def _stringify_transaction(self, transaction: dict) -> str:
         field_strs: list[str] = []
